@@ -1,0 +1,31 @@
+[database]
+adapter  = Mysql
+host     = localhost
+username = root
+password = secret
+dbname   = store
+
+[mongo]
+host     = localhost
+username = admin
+password = 123456
+dbname   = monkey
+
+[application]
+appDir         = ../app/
+controllersDir = ../app/controllers/
+modelsDir      = ../app/models/
+collectionsDir = ../app/collections/
+migrationsDir  = ../app/migrations/
+viewsDir       = ../app/views/
+pluginsDir     = ../app/plugins/
+libraryDir     = ../app/library/
+cacheDir       = ../cache/
+jobsDir        = ../app/jobs/
+tasksDir        = ../app/tasks/
+servicesDir    = ../app/services/
+componentsDir    = ../app/components/
+baseUri        = /home/rc/monkey/
+
+[models]
+metadata.adapter = "Memory"

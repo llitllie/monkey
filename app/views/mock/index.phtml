@@ -1,0 +1,89 @@
+<div class="page-header">
+    <h1>Monkey</h1>
+    <p class="lead">Try it out: <code><?php echo $curl;?></code></p>
+</div>
+<div clas="row">
+    <form id="create-mock-response">
+        <h5>Header</h5>
+        <div class="form-group row">
+            <label for="status" class="col-sm-2 col-form-label">Status</label>
+            <div class="col-sm-3">
+                <select class="form-control" id="status">
+                    <?php
+                    foreach ($status as $code => $message) {
+                        echo '<option value="'.$code.'">'.$code.' '.$message.'</option>';
+                    }
+                    ?>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="content-type" class="col-sm-2 col-form-label">Content-Type</label>
+            <div class="col-sm-3">
+                <select class="form-control" id="content-type">
+                    <?php
+                    foreach ($contentType as $v) {
+                        echo '<option value="'.$v.'">'.$v.'</option>';
+                    }
+                    ?>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="rrequest-body" class="col-sm-2 col-form-label">Body</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id="request-body" rows="15"></textarea>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary" id="create">Create</button>
+            </div>
+        </div>
+    </form>
+    <div id="show-response"></div>
+</div>
+<script type="text/javascript">
+$(function($){
+    function showAlert(color, message) {
+        var alert = '<div class="alert alert-' + color + ' alert-dismissible fade show" role="alert">';
+        alert += message;
+        alert += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+        $('#show-response').append(alert);
+    }
+    var <?php echo $this->security->getTokenKey(); ?> = '<?php echo $this->security->getToken(); ?>';
+    $('#create-mock-response').submit(function(){
+        var status = $('#status').val();
+        var headers = {"Content-Type": $('#content-type').val()};
+        var body = $('#request-body').val();
+        var data = {
+            code: status,
+            headers: headers,
+            body: body,
+            token: <?php echo $this->security->getTokenKey(); ?>
+        };
+        console.log(data);
+        $.ajax({
+            url: '/api/mock',
+            method: 'POST',
+            dataType: 'json',
+            data: data,
+            success: function(resposne, textStatus, jqXHR) {
+                // console.log(resposne);
+                // console.log(jqXHR);
+                var alert = '';
+                if (resposne.error === 0) {
+                    showAlert('success', 'Create success: ' + window.location.origin + '/api/mock/' + resposne.data.id);
+                    <?php echo $this->security->getTokenKey(); ?> = resposne.data.token;
+                } else  {
+                    showAlert('danger', 'Create failed: ' + resposne.message);
+                }
+            },
+            fail: function (jqXHR, textStatus, errorThrown) {
+                showAlert('danger', 'Unexpected error');
+            }
+        });
+        return false; 
+    });
+});
+</script>

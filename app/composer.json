@@ -1,0 +1,44 @@
+{
+    "license": "MIT",
+    "homepage": "https://gitee.com/huangcanqiang/monkey",
+    "authors": [{
+        "name": "Channing",
+        "email": "llitllie@gmail.com",
+        "homepage": "https://gitee.com/huangcanqiang/monkey"
+    }],
+    "require": {
+		"phalcon/incubator" : "^3.4",
+        "php": "^7.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8",
+        "phpstan/phpstan": "^0.11.8",
+        "friendsofphp/php-cs-fixer": "^2.15",
+        "phalcon/ide-stubs": "^4.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "static-analyse-src": [
+            "phpstan analyze src -l 7 --ansi"
+        ],
+        "cs-analyse": [
+            "php-cs-fixer fix -v --dry-run --diff --stop-on-violation --ansi"
+        ],
+        "analyse": [
+            "@static-analyse-src",
+            "@cs-analyse"
+        ],
+        "test": [
+            "@analyse",
+            "@unit-tests"
+        ],
+        "unit-tests": [
+            "phpunit tests --testdox --colors=always"
+        ],
+        "fix": "php-cs-fixer fix -v --ansi"
+    }
+}
